@@ -1,0 +1,1 @@
+char[strlen(c) + 1];

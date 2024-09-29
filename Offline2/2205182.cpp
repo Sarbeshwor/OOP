@@ -14,7 +14,7 @@ private:
 public:
     Rectangle(int l, int w, const char *c)
     {
-        color = new char(strlen(c) + 1);
+        color = new char[strlen(c) + 1];
         strcpy(color, c);
         len = l;
         width = w;
@@ -64,7 +64,7 @@ public:
     void setColor(const char *c)
     {
         delete[] color;
-        color = new char(strlen(c) + 1);
+        color = new char[strlen(c) + 1];
         strcpy(color, c);
     }
     int getlen()
@@ -80,7 +80,7 @@ public:
         len = l;
         width = w;
         delete[] color;
-        color = new char(strlen(c) + 1);
+        color = new char[strlen(c) + 1];
         strcpy(color, c);
     }
 };
@@ -187,7 +187,7 @@ public:
     Circle(int rad, const char *c)
     {
         radi = rad;
-        color = new char(strlen(c) + 1);
+        color = new char[strlen(c) + 1];
         strcpy(color, c);
     }
 
@@ -230,7 +230,7 @@ public:
     void setColor(const char *c)
     {
         delete[] color;
-        color = new char(strlen(c) + 1);
+        color = new char[strlen(c) + 1];
         strcpy(color, c);
     }
     int getrad()
@@ -241,16 +241,16 @@ public:
     {
         radi = r;
         delete[] color;
-        color = new char(strlen(c) + 1);
+        color = new char[strlen(c) + 1];
         strcpy(color, c);
     }
 };
 class ShapeCollection
 {
 private:
-    Rectangle *rec;
-    Triangle *tri;
-    Circle *cir;
+    Rectangle **rec;
+    Triangle **tri;
+    Circle **cir;
     int rc;
     int tc;
     int cc;
@@ -261,9 +261,9 @@ public:
         rc = 1;
         tc = 1;
         cc = 1;
-        rec = new Rectangle[rc];
-        tri = new Triangle[tc];
-        cir = new Circle[cc];
+        rec = new Rectangle*[rc];
+        tri = new Triangle*[tc];
+        cir = new Circle*[cc];
         r=0;
         t=0;
         c=0;
@@ -271,16 +271,28 @@ public:
     }
     ~ShapeCollection()
     {
+        for(int i = 0; i < r; i++)
+        {
+            delete rec[i];
+        }
+        for(int i = 0; i < t; i++)
+        {
+            delete tri[i];
+        }
+        for(int i = 0; i < c; i++)
+        {
+            delete cir[i];
+        }
         delete[] rec;
         delete[] tri;
         delete[] cir;
+
     }
     void resizeRect(int newCapacity){
-        Rectangle *newrec = new Rectangle[newCapacity];
+        Rectangle **newrec = new Rectangle*[newCapacity];
         for (int i = 0; i < r; i++)
         {
-            Rectangle *a = rec[i].clone();
-            newrec[i] = *a;
+            newrec[i] = rec[i]->clone();
         }
         delete[] rec;
         rec = newrec;
@@ -288,11 +300,10 @@ public:
         rc = newCapacity;
     }
     void resizeTri(int newCapacity){
-        Triangle *newtri = new Triangle[newCapacity];
+        Triangle **newtri = new Triangle*[newCapacity];
         for (int i = 0; i < t; i++)
         {
-            Triangle *a = tri[i].clone();
-            newtri[i] = *a;
+            newtri[i] = tri[i]->clone();
         }
         delete[] tri;
         tri = newtri;
@@ -300,11 +311,10 @@ public:
         tc = newCapacity;
     }
     void resizeCir(int newCapacity){
-        Circle *newcir = new Circle[newCapacity];
+        Circle **newcir = new Circle*[newCapacity];
         for (int i = 0; i < c; i++)
         {
-            Circle *a = cir[i].clone();
-            newcir[i] = *a;
+            newcir[i] = cir[i]->clone();
         }
         delete[] cir;
         cir = newcir;
@@ -317,7 +327,7 @@ public:
         {
             resizeRect(rc * 2);
         }
-       rec[r].setvalues(rect.getlen(), rect.getwidth(), rect.getColor());
+        rec[r] = new Rectangle(rect);
         r++;
     }
     void add(Circle &circ)
@@ -326,7 +336,7 @@ public:
         {
             resizeCir(c * 2);
         }
-        cir[c].setvalues(circ.getrad(), circ.getColor());
+        cir[c] = new Circle(circ);
         c++;
     }
     void add(Triangle &tria)
@@ -335,7 +345,7 @@ public:
         {
             resizeTri(tc * 2);
         }
-        tri[t].setvalues(tria.geta(), tria.getb(), tria.getc(), tria.getColor());
+        tri[t] = new Triangle(tria);
         t++;
     }
     int getRectCount()
@@ -355,7 +365,7 @@ public:
         for (int i = 0; i < r; i++)
         {
             cout << "Rectangle " << i << ":";
-            cout << " length: " << rec[i].getlen() << " Width: " << rec[i].getwidth() << endl;
+            cout << " length: " << rec[i]->getlen() << " Width: " << rec[i]->getwidth() << endl;
         }
     }
     void printTriangles()
@@ -363,7 +373,7 @@ public:
         for (int i = 0; i < t; i++)
         {
             cout << "Traingle " << i;
-            cout << ": a: " << tri[i].geta() << " b: " << tri[i].getb() << " c: " << tri[i].getc() << endl;
+            cout << ": a: " << tri[i]->geta() << " b: " << tri[i]->getb() << " c: " << tri[i]->getc() << endl;
         }
     }
     void printCircles()
@@ -371,7 +381,7 @@ public:
         for (int i = 0; i < c; i++)
         {
             cout << "Cicle " << i;
-            cout << ": radius: " << cir[i].getrad() << endl;
+            cout << ": Radius: " << cir[i]->getrad() << endl;
         }
     }
 };

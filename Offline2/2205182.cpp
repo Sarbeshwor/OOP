@@ -42,7 +42,7 @@ public:
     {
         Rectangle *r = new Rectangle;
         r->color = new char(strlen(color) + 1);
-        strcpy(r->color, color);
+        // strcpy(r->color, color);
         r->len = len;
         r->width = width;
         return r;
@@ -75,14 +75,14 @@ public:
     {
         return width;
     }
-    void setvalues(int l, int w, const char *c)
-    {
-        len = l;
-        width = w;
-        delete[] color;
-        color = new char[strlen(c) + 1];
-        strcpy(color, c);
-    }
+    // void setvalues(int l, int w, const char *c)
+    // {
+    //     len = l;
+    //     width = w;
+    //     delete[] color;
+    //     color = new char[strlen(c) + 1];
+    //     strcpy(color, c);
+    // }
 };
 
 class Triangle
@@ -128,7 +128,7 @@ public:
     {
         Triangle *r = new Triangle;
         r->color = new char(strlen(color) + 1);
-        strcpy(r->color, color);
+        // strcpy(r->color, color);
         r->a = a;
         r->b = b;
         r->c = c;
@@ -167,15 +167,15 @@ public:
     {
         return c;
     }
-    void setvalues(int x, int y, int z, const char *col)
-    {
-        a = x;
-        b = y;
-        c = z;
-        delete[] color;
-        color = new char(strlen(col) + 1);
-        strcpy(color, col);
-    }
+    // void setvalues(int x, int y, int z, const char *col)
+    // {
+    //     a = x;
+    //     b = y;
+    //     c = z;
+    //     delete[] color;
+    //     color = new char(strlen(col) + 1);
+    //     strcpy(color, col);
+    // }
 };
 class Circle
 {
@@ -209,7 +209,7 @@ public:
     Circle *clone()
     {
         Circle *r = new Circle;
-        r->color = new char(strlen(color) + 1);
+        // r->color = new char(strlen(color) + 1);
         strcpy(r->color, color);
         r->radi = radi;
         return r;
